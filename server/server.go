@@ -101,6 +101,11 @@ func (h *SlackHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	serve := func(f SlackHandlerFunc, ctx interface{}) {
 		if err := f(res, req, ctx); err != nil {
 			h.ErrorLogf("HTTP handler error: %s", err)
+			if b, bodyErr := ioutil.ReadAll(r.Body); bodyErr == nil {
+				if len(b) > 0 {
+					h.ErrorLogf("Request body: %s", string(b), nil)
+				}
+			}
 		}
 	}
 
