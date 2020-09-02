@@ -160,6 +160,8 @@ func (h *SlackHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			interactionPayload, err := req.InteractionCallbackPayload()
 			if err != nil {
 				h.ErrorLogf("Error parsing interactionPayload: %s", err)
+				w.WriteHeader(400)
+				return
 			}
 			// Loop through all our routes and attempt a match on the InteractionType / CallbackID pair
 			if interactionPayload != nil {
